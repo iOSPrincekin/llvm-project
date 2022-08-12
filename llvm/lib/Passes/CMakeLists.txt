@@ -15,6 +15,7 @@ add_llvm_component_library(LLVMPasses
   Analysis
   Core
   Coroutines
+  CountIR
   HelloNew
   IPO
   InstCombine
