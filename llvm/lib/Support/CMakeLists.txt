@@ -126,6 +126,7 @@ add_llvm_component_library(LLVMSupport
   FormatVariadic.cpp
   GlobPattern.cpp
   GraphWriter.cpp
+  GraphWriter.h
   Hashing.cpp
   InitLLVM.cpp
   InstructionCost.cpp

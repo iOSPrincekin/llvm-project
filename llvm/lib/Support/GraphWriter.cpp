@@ -21,11 +21,14 @@
 #include "llvm/Support/ErrorOr.h"
 #include "llvm/Support/FileSystem.h"
 #include "llvm/Support/Program.h"
+#include "llvm/Support/FileSystem.h"
 #include "llvm/Support/raw_ostream.h"
 #include <cassert>
 #include <system_error>
 #include <string>
 #include <vector>
+#include <time.h>
+#include <sys/time.h>
 
 using namespace llvm;
 
@@ -103,8 +106,58 @@ std::string llvm::createGraphFilename(const Twine &Name, int &FD) {
   // Replace illegal characters in graph Filename with '_' if needed
   std::string CleansedName = replaceIllegalFilenameChars(N, '_');
 
+#define Test_Obf
+#ifdef Test_Obf
+    static int count_cfgfunc = 0;
+    static int count_cfgmain = 0;
+    
+    std::error_code EC;
+    
+    std::string dir = "/Users/lee/Desktop/TEST/xdot/";
+
+    std::string dotFileName = dir.append(CleansedName);
+      
+    time_t timer;
+    char buffer[26], usec_buf[6];
+    struct tm* tm_info;
+
+    timer = time(NULL);
+    tm_info = localtime(&timer);
+    struct timeval tmnow;
+    gettimeofday(&tmnow, NULL);
+    strftime(buffer, 26, "%Y-%m-%d_%H-%M-%S", tm_info);
+
+    strcat(buffer,".");
+    sprintf(usec_buf,"%3d",(int)tmnow.tv_usec);
+    strcat(buffer,usec_buf);
+    
+    dotFileName = dotFileName.append("_");
+
+    if (CleansedName == "cfgfunc") {
+        std::string no = std::to_string(count_cfgfunc++);
+        dotFileName = dotFileName.append(no);
+    }
+    
+    if (CleansedName == "cfgmain") {
+        std::string no = std::to_string(count_cfgmain++);
+        dotFileName = dotFileName.append(no);
+    }
+   // dotFileName = dotFileName.append(buffer);
+
+    dotFileName = dotFileName.append(".dot");
+    Filename = dotFileName;
+    
+    sys::fs::OpenFlags Flags = sys::fs::OF_None;
+    int Mode = sys::fs::owner_read | sys::fs::owner_write;
+    Twine t = Twine(Filename.str());
+    EC = sys::fs::openFileForReadWrite(t, FD,
+                                       sys::fs::CD_CreateAlways, Flags, Mode);
+    
+    
+#else
   std::error_code EC =
       sys::fs::createTemporaryFile(CleansedName, "dot", FD, Filename);
+#endif
   if (EC) {
     errs() << "Error: " << EC.message() << "\n";
     return "";
@@ -142,6 +195,7 @@ struct GraphSession {
     SmallVector<StringRef, 8> parts;
     Names.split(parts, '|');
     for (auto Name : parts) {
+
       if (ErrorOr<std::string> P = sys::findProgramByName(Name)) {
         ProgramPath = *P;
         return true;
@@ -186,8 +240,8 @@ bool llvm::DisplayGraph(StringRef FilenameRef, bool wait,
       args.push_back("-W");
     args.push_back(Filename);
     errs() << "Trying 'open' program... ";
-    if (!ExecGraphViewer(ViewerPath, args, Filename, wait, ErrMsg))
-      return false;
+//    if (!ExecGraphViewer(ViewerPath, args, Filename, wait, ErrMsg))
+//      return false;
   }
 #endif
   if (S.TryFindProgram("xdg-open", ViewerPath)) {
@@ -215,8 +269,8 @@ bool llvm::DisplayGraph(StringRef FilenameRef, bool wait,
     args.push_back(ViewerPath);
     args.push_back(Filename);
 
-    args.push_back("-f");
-    args.push_back(getProgramName(program));
+//  args.push_back("-f");
+//  args.push_back(getProgramName(program));
 
     errs() << "Running 'xdot.py' program... ";
     return ExecGraphViewer(ViewerPath, args, Filename, wait, ErrMsg);

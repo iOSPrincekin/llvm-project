@@ -77,8 +77,11 @@ ErrorOr<std::string> sys::findProgramByName(StringRef Name,
   if (Paths.empty())
     if (const char *PathEnv = std::getenv("PATH")) {
       SplitString(PathEnv, EnvironmentPaths, ":");
+      StringRef localPath = "/usr/local/bin";
+      EnvironmentPaths.push_back(localPath);
       Paths = EnvironmentPaths;
     }
+
 
   for (auto Path : Paths) {
     if (Path.empty())

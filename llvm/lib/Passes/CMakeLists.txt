@@ -16,6 +16,7 @@ add_llvm_component_library(LLVMPasses
   Core
   Coroutines
   CountIR
+  Obfuscation
   HelloNew
   IPO
   InstCombine
