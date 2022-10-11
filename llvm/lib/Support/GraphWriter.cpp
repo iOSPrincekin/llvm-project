@@ -110,6 +110,7 @@ std::string llvm::createGraphFilename(const Twine &Name, int &FD) {
 #ifdef Test_Obf
     static int count_cfgfunc = 0;
     static int count_cfgmain = 0;
+    static int count_cfgputs = 0;
     
     std::error_code EC;
     
@@ -142,6 +143,12 @@ std::string llvm::createGraphFilename(const Twine &Name, int &FD) {
         std::string no = std::to_string(count_cfgmain++);
         dotFileName = dotFileName.append(no);
     }
+    
+    if (CleansedName == "cfgputs") {
+        std::string no = std::to_string(count_cfgputs++);
+        dotFileName = dotFileName.append(no);
+    }
+    
    // dotFileName = dotFileName.append(buffer);
 
     dotFileName = dotFileName.append(".dot");
@@ -240,8 +247,9 @@ bool llvm::DisplayGraph(StringRef FilenameRef, bool wait,
       args.push_back("-W");
     args.push_back(Filename);
     errs() << "Trying 'open' program... ";
-//    if (!ExecGraphViewer(ViewerPath, args, Filename, wait, ErrMsg))
-//      return false;
+    return false;
+    if (!ExecGraphViewer(ViewerPath, args, Filename, wait, ErrMsg))
+      return false;
   }
 #endif
   if (S.TryFindProgram("xdg-open", ViewerPath)) {

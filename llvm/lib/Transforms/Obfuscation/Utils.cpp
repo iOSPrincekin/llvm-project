@@ -1,6 +1,7 @@
 #include "llvm/Transforms/Obfuscation/Utils.h"
 #include "llvm/Transforms/Obfuscation/Substitution.h"
 #include "llvm/Transforms/Obfuscation/BogusControlFlow.h"
+#include "llvm/Transforms/Obfuscation/Flattening.h"
 #include "llvm/Support/raw_ostream.h"
 #include <sstream>
 #include "llvm/IR/Module.h"
@@ -149,6 +150,8 @@ PreservedAnalyses LLVMObfuscationPass::run(Function &F, FunctionAnalysisManager 
     s->runOnFunction(F);
     FunctionPass* b = (FunctionPass*)createBogus(BogusControlFlow);
     b->runOnFunction(F);
+    FunctionPass* f = (FunctionPass*)createFlattening(Flattening);
+    f->runOnFunction(F);
     return PreservedAnalyses::all();
 }
 

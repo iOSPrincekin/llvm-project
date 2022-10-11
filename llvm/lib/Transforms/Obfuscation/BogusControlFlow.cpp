@@ -98,7 +98,9 @@ struct BogusControlFlow : public FunctionPass{
         while(!basicBlocks.empty()){
             NumBasicBlocks ++;
             // Basic Blocks' selection
-            if((int)llvm::cryptoutils->get_range(100) <= ObfProbRate){
+            int range = (int)llvm::cryptoutils->get_range(30);
+            int rate = ObfProbRate;
+            if(range <= rate){
                 DEBUG_WITH_TYPE(DEBUG_TYPE, errs() << "bcf: Block "
                                 << NumBasicBlocks <<" selected. \n");
                 hasBeenModified = true;

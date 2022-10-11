@@ -77,6 +77,7 @@ StringRef Triple::getArchTypeName(ArchType Kind) {
   case x86:            return "i386";
   case x86_64:         return "x86_64";
   case xcore:          return "xcore";
+  case myriscv32:      return "myriscv32";
   }
 
   llvm_unreachable("Invalid ArchType!");
@@ -150,6 +151,7 @@ StringRef Triple::getArchTypePrefix(ArchType Kind) {
   case wasm32:
   case wasm64:      return "wasm";
 
+  case myriscv32:
   case riscv32:
   case riscv64:     return "riscv";
 
@@ -327,6 +329,7 @@ Triple::ArchType Triple::getArchTypeForLLVMName(StringRef Name) {
     .Case("renderscript64", renderscript64)
     .Case("ve", ve)
     .Case("csky", csky)
+    .Case("myriscv32", myriscv32)
     .Default(UnknownArch);
 }
 
@@ -459,6 +462,7 @@ static Triple::ArchType parseArch(StringRef ArchName) {
     .Case("wasm32", Triple::wasm32)
     .Case("wasm64", Triple::wasm64)
     .Case("csky", Triple::csky)
+    .Case("myriscv32", Triple::myriscv32)
     .Default(Triple::UnknownArch);
 
   // Some architectures require special parsing logic just to compute the
@@ -708,6 +712,7 @@ static Triple::ObjectFormatType getDefaultFormat(const Triple &T) {
   case Triple::mips:
   case Triple::mipsel:
   case Triple::msp430:
+  case Triple::myriscv32:
   case Triple::nvptx64:
   case Triple::nvptx:
   case Triple::ppc64le:
@@ -1278,6 +1283,7 @@ static unsigned getArchPointerBitWidth(llvm::Triple::ArchType Arch) {
   case llvm::Triple::le32:
   case llvm::Triple::mips:
   case llvm::Triple::mipsel:
+  case llvm::Triple::myriscv32:
   case llvm::Triple::nvptx:
   case llvm::Triple::ppc:
   case llvm::Triple::ppcle:
@@ -1362,6 +1368,7 @@ Triple Triple::get32BitArchVariant() const {
   case Triple::le32:
   case Triple::mips:
   case Triple::mipsel:
+  case Triple::myriscv32:
   case Triple::nvptx:
   case Triple::ppc:
   case Triple::ppcle:
@@ -1413,6 +1420,7 @@ Triple Triple::get64BitArchVariant() const {
   case Triple::kalimba:
   case Triple::lanai:
   case Triple::msp430:
+  case Triple::myriscv32:
   case Triple::r600:
   case Triple::shave:
   case Triple::sparcel:
