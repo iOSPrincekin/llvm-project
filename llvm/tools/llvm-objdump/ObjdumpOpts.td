@@ -335,3 +335,15 @@ def arch_EQ : Joined<["--"], "arch=">,
 def : Separate<["--"], "arch">,
   Alias<arch_EQ>,
   Group<grp_mach_o>;
+
+def InputDoArmStr : Flag<["--"], "InputDoArmStr=">,
+  HelpText<"do_arm function name string">,
+  Group<grp_mach_o>;
+
+def InputUncompressStr : Flag<["--"], "InputUncompressStr=">,
+  HelpText<"uncompress function name string">,
+  Group<grp_mach_o>;
+
+def svc_enable_EQ : Flag<["--"], "svc_enable=">,
+  HelpText<"svc enable argument">,
+  Group<grp_mach_o>;

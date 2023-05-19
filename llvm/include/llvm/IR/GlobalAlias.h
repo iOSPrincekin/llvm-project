@@ -107,7 +107,15 @@ template <>
 struct OperandTraits<GlobalAlias>
     : public FixedNumOperandTraits<GlobalAlias, 1> {};
 
-DEFINE_TRANSPARENT_OPERAND_ACCESSORS(GlobalAlias, Constant)
+DEFINE_TRANSPARENT_OPERAND_ACCESSORS2(GlobalAlias, Constant)
+
+
+template <int Idx_nocapture> Use &GlobalAlias::Op() {
+  return this->OpFrom<Idx_nocapture>(this);
+}
+template <int Idx_nocapture> const Use &GlobalAlias::Op() const {
+  return this->OpFrom<Idx_nocapture>(this);
+}
 
 } // end namespace llvm
 

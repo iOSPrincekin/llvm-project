@@ -643,6 +643,7 @@ public:
   explicit raw_string_ostream(std::string &O) : OS(O) {
     SetUnbuffered();
   }
+  ~raw_string_ostream();
 
   /// Returns the string's reference. In most cases it is better to simply use
   /// the underlying std::string directly.

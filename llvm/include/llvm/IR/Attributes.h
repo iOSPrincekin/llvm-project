@@ -14,7 +14,6 @@
 
 #ifndef LLVM_IR_ATTRIBUTES_H
 #define LLVM_IR_ATTRIBUTES_H
-
 #include "llvm-c/Types.h"
 #include "llvm/ADT/ArrayRef.h"
 #include "llvm/ADT/Optional.h"
