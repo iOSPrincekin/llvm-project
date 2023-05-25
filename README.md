@@ -108,3 +108,41 @@ Consult the
 page for detailed information on configuring and compiling LLVM. You can visit
 [Directory Layout](https://llvm.org/docs/GettingStarted.html#directory-layout)
 to learn about the layout of the source code tree.
+
+
+
+## 1.4 opt 调试参数 （可以调试 ollvm）
+
+-S -fla -debug-only=flattening --passes="obfuscation"  /Users/lee/Desktop/Compiler/Learn_LLVM_12/llvm-project/llvm/lib/Transforms/Obfuscation/example/demo.ll -o /Users/lee/Desktop/Compiler/Learn_LLVM_12/llvm-project/llvm/lib/Transforms/Obfuscation/example/demo_out.ll
+
+## 1.5 clang调试参数
+
+-S -emit-llvm /Users/lee/Desktop/Compiler/Learn_LLVM_12/llvm-project/llvm/lib/Transforms/Obfuscation/example/main.c -o  /Users/lee/Desktop/Compiler/Learn_LLVM_12/llvm-project/llvm/lib/Transforms/Obfuscation/example/main.ll
+
+
+SDKROOT = /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk
+
+## 1.6 lldb 调试 obfuscation ,调试 clang
+### 1.首先使用 Xcode的Debug模式下 clang -### 输出参数
+
+-### -S -emit-llvm -mllvm -sub -mllvm -bcf -mllvm -fla /Users/lee/Desktop/Compiler/Learn_LLVM_12/llvm-project/llvm/lib/Transforms/Obfuscation/example/main.c -o  /Users/lee/Desktop/Compiler/Learn_LLVM_12/llvm-project/llvm/lib/Transforms/Obfuscation/example/main.ll
+
+获得
+
+clang version 12.0.0 (git@github.com:iOSPrincekin/llvm-project.git f460958227210abde112d224b8c156555321c34b)
+Target: x86_64-apple-darwin21.5.0
+Thread model: posix
+InstalledDir: /Users/lee/Desktop/Compiler/Learn_LLVM_12/llvmorg-Xcode/Debug/bin
+ (in-process)
+ "/Users/lee/Desktop/Compiler/Learn_LLVM_12/llvmorg-Xcode/Debug/bin/clang" "-cc1" "-triple" "x86_64-apple-macosx12.0.0" "-Wundef-prefix=TARGET_OS_" "-Werror=undef-prefix" "-Wdeprecated-objc-isa-usage" "-Werror=deprecated-objc-isa-usage" "-emit-llvm" "-disable-free" "-main-file-name" "main.c" "-mrelocation-model" "pic" "-pic-level" "2" "-mframe-pointer=all" "-fno-rounding-math" "-munwind-tables" "-target-sdk-version=12.3" "-fcompatibility-qualified-id-block-type-checking" "-fvisibility-inlines-hidden-static-local-var" "-target-cpu" "penryn" "-tune-cpu" "generic" "-debugger-tuning=lldb" "-target-linker-version" "762" "-resource-dir" "/Users/lee/Desktop/Compiler/Learn_LLVM_12/llvmorg-Xcode/Debug/lib/clang/12.0.0" "-isysroot" "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk" "-internal-isystem" "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/usr/local/include" "-internal-isystem" "/Users/lee/Desktop/Compiler/Learn_LLVM_12/llvmorg-Xcode/Debug/lib/clang/12.0.0/include" "-internal-externc-isystem" "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/usr/include" "-fdebug-compilation-dir" "/Users/lee/Desktop/Compiler/Learn_LLVM_12/llvmorg-Xcode/Debug/bin" "-ferror-limit" "19" "-stack-protector" "1" "-fblocks" "-fencode-extended-block-signature" "-fregister-global-dtors-with-atexit" "-fgnuc-version=4.2.1" "-fmax-type-align=16" "-mllvm" "-sub" "-mllvm" "-bcf" "-mllvm" "-fla" "-o" "/Users/lee/Desktop/Compiler/Learn_LLVM_12/llvm-project/llvm/lib/Transforms/Obfuscation/example/main.ll" "-x" "c" "/Users/lee/Desktop/Compiler/Learn_LLVM_12/llvm-project/llvm/lib/Transforms/Obfuscation/example/main.c"
+### 2.使用新的参数，重新运行Xcode Debug模式下的clang
+
+参数
+
+"-cc1" "-triple" "x86_64-apple-macosx12.0.0" "-Wundef-prefix=TARGET_OS_" "-Werror=undef-prefix" "-Wdeprecated-objc-isa-usage" "-Werror=deprecated-objc-isa-usage" "-emit-llvm" "-disable-free" "-main-file-name" "main.c" "-mrelocation-model" "pic" "-pic-level" "2" "-mframe-pointer=all" "-fno-rounding-math" "-munwind-tables" "-target-sdk-version=12.3" "-fcompatibility-qualified-id-block-type-checking" "-fvisibility-inlines-hidden-static-local-var" "-target-cpu" "penryn" "-tune-cpu" "generic" "-debugger-tuning=lldb" "-target-linker-version" "762" "-resource-dir" "/Users/lee/Desktop/Compiler/Learn_LLVM_12/llvmorg-Xcode/Debug/lib/clang/12.0.0" "-isysroot" "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk" "-internal-isystem" "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/usr/local/include" "-internal-isystem" "/Users/lee/Desktop/Compiler/Learn_LLVM_12/llvmorg-Xcode/Debug/lib/clang/12.0.0/include" "-internal-externc-isystem" "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX12.3.sdk/usr/include" "-fdebug-compilation-dir" "/Users/lee/Desktop/Compiler/Learn_LLVM_12/llvmorg-Xcode/Debug/bin" "-ferror-limit" "19" "-stack-protector" "1" "-fblocks" "-fencode-extended-block-signature" "-fregister-global-dtors-with-atexit" "-fgnuc-version=4.2.1" "-fmax-type-align=16" "-mllvm" "-sub" "-mllvm" "-bcf" "-mllvm" "-fla" "-o" "/Users/lee/Desktop/Compiler/Learn_LLVM_12/llvm-project/llvm/lib/Transforms/Obfuscation/example/main.ll" "-x" "c" "/Users/lee/Desktop/Compiler/Learn_LLVM_12/llvm-project/llvm/lib/Transforms/Obfuscation/example/main.c"
+
+## 1.7 解决clang 调试时，LLVM_DEBUG(dbgs() 不输出log的问题，-mllvm -debug、-mllvm -debug-only=isel 必须加 -mllvm
+
+参数
+
+--target=riscv32 -mllvm -debug -O2 /Users/lee/Desktop/Compiler/Learn_LLVM_12/Learn-LLVM-12/Chapter09/tblgen/LLVM笔记/LLVM笔记\(10\)-指令选择\(二\)lowering/1.c  -S -mllvm -view-dag-combine1-dags=true
